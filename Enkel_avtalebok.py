@@ -13,7 +13,7 @@ class Avtale:
 
     #e: __str__ metode for å printe ut avtaler på oversiktelig vis
     def __str__(self):
-        return f"Avtalen angår: {self.tittel}\nLokasjon: {self.sted}\n{self.starttidspunkt}\nAvtalen beregnes til å vare i omlag {self.varighet} minutter"
+        return f"Avtalen angår: {self.tittel}\nLokasjon: {self.sted}\nTidspunkt: {self.starttidspunkt}\nAvtalen beregnes til å vare i omlag {self.varighet} minutter"
 
 
 #f: Gir brukeren muligheten til å legge inn flere avtaler
@@ -40,15 +40,17 @@ def avtale_bok(tittel):
 
 
 #h: Skriver lister til tekstfil i printet format (som ved bruk av __str__ funksjon)
-def lag_fil(liste):
-    with open('Avtale_liste.txt', 'w') as f:
-        for line in liste:
+def lag_fil():
+    svar = input("Hva vil du kalle filen?: ")
+    with open(svar, 'w') as f:
+        for line in avtaler:
             f.write(f"{line}\n")
 
 
 #i: Leser fil og printer ut til terminal
 def les_fil():
-    with open('Avtale_liste.txt', 'r') as f:
+    filnavn = input("Skriv navnet på filen: ")
+    with open(filnavn, 'r') as f:
         for line in f:
             print(line)
 
@@ -58,7 +60,46 @@ def dato_sjekk():
     svar = datetime.fromisoformat(input("Skriv inn datoen du har lyst å sjekke: (ÅÅÅÅ-MM-DD) ")).date()
     for dato in range(len(avtaler)):
         if svar == (avtaler[dato].starttidspunkt.date()):
+            print("\nFølgende avtale(r) er funnet: ")
             print(avtaler[dato])
+        else:
+            print("Finner ingen avtale med forespurt dato.")
+            break
+
+#k: Søker etter titler på avtaler. Oppgaven tolkes som man ikke skal kunne søke etter sted.
+def tittel_sjekk():
+    svar = input("Skriv tittel på avtalen du har lyst å sjekke: ").lower()
+    for tittel in range(len(avtaler)):
+        if svar == (avtaler[tittel].tittel.lower()):
+            print("\nFølgende avtale(r) er funnet: ")
+            print(avtaler[tittel])
+        else:
+            print("Finner ingen avtale med forespurt tittel.")
+            break
+
+
+#l: Menysystem
+def meny():
+    menyvalg = ["Lag ny avtale", "Les inn fil med avtaler", "Skriv avtaler til ny fil", "Avslutt program"]
+    i = 0
+    while True:
+        for i in range(len(menyvalg)):
+            print(f"{i+1}. {menyvalg[i]}")
+        valg = int(input("Velg et alternativ: "))
+        if valg == 1:
+            ny_avtale()
+            continue
+        elif valg == 2:
+            les_fil()
+            continue
+        elif valg == 3:
+            lag_fil()
+            continue
+        elif valg == 4:
+            print("Programmet avsluttes.")
+            break
+        else:
+            print("\nOBS! Skriv et tall mellom 1 og 4.")
 
 
 #Funksjon laget frivillig
@@ -71,16 +112,17 @@ def mer_info():
             break
         elif svar != "nei":
             # fiks
-            pass
+            break
         else:
-            pass    
+            break    
 
 
 
 if __name__ == "__main__":
-    ny_avtale()
-    avtale_bok("Avtaler")
+    meny()
+ #   ny_avtale()
+ #   avtale_bok("Avtaler")
 #    mer_info()
 #    lag_fil(avtaler)
 #    les_fil()
-    dato_sjekk()
+ #   tittel_sjekk()
