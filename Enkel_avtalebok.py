@@ -41,7 +41,7 @@ def avtale_bok(tittel):
 
 #h: Skriver lister til tekstfil i printet format (som ved bruk av __str__ funksjon)
 def lag_fil():
-    svar = input("Hva vil du kalle filen?: ")
+    svar = input("Hva vil du kalle filen?: ")+".txt"
     with open(svar, 'w') as f:
         for line in avtaler:
             f.write(f"{line}\n")
@@ -49,7 +49,7 @@ def lag_fil():
 
 #i: Leser fil og printer ut til terminal
 def les_fil():
-    filnavn = input("Skriv navnet på filen: ")
+    filnavn = input("Skriv navnet på filen: ")+".txt"
     with open(filnavn, 'r') as f:
         for line in f:
             print(line)
