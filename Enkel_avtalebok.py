@@ -55,13 +55,13 @@ def les_fil():
 
 #j: Printer ut liste av avtaler på bestemt dato
 def dato_sjekk():
-    svar = datetime.fromisoformat(input("Skriv inn datoen du har lyst å sjekke: ÅÅÅÅ-MM-DD TT:MM:SS"))
+    svar = datetime.fromisoformat(input("Skriv inn datoen du har lyst å sjekke: (ÅÅÅÅ-MM-DD) ")).date()
     for dato in range(len(avtaler)):
-        if svar == avtaler.starttidspunkt[:10]:
+        if svar == (avtaler[dato].starttidspunkt.date()):
             print(avtaler[dato])
 
 
-#Metode laget frivillig
+#Funksjon laget frivillig
 def mer_info():
     svar = input("Vil du se mer info om en bestemt avtale? ja/nei: ")
     while True:
@@ -78,8 +78,8 @@ def mer_info():
 
 
 if __name__ == "__main__":
-#    ny_avtale()
-#    avtale_bok("Avtaler")
+    ny_avtale()
+    avtale_bok("Avtaler")
 #    mer_info()
 #    lag_fil(avtaler)
 #    les_fil()
