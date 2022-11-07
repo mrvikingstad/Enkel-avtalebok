@@ -151,11 +151,13 @@ def meny():
             continue
         elif valg == 5:
             rediger_avtale()
+            continue
         elif valg == 6:
             print("Programmet avsluttes.")
             break
         else:
             print("\nOBS! Skriv et tall mellom 1 og 6.")
+            continue
 
 if __name__ == "__main__":
     meny()
