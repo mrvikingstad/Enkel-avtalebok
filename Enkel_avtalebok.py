@@ -2,6 +2,10 @@
 from datetime import datetime
 
 
+
+
+avtaler = []
+
 #d
 class Avtale:
 
@@ -19,8 +23,6 @@ class Avtale:
 #f: Gir brukeren muligheten til å legge inn flere avtaler
 def ny_avtale():
     svar = "ja"
-    global avtaler
-    avtaler = []
     while svar == "ja":
         avtale_tittel = input("Hva gjelder avtalen?: ")
         avtale_sted = input("Hvor er avtalen?: ")
@@ -53,6 +55,7 @@ def les_fil():
     with open(filnavn, 'r') as f:
         for line in f:
             print(line)
+            avtaler.append(line)
 
 
 #j: Printer ut liste av avtaler på bestemt dato
@@ -77,15 +80,63 @@ def tittel_sjekk():
             print("Finner ingen avtale med forespurt tittel.")
             break
 
+#m: Lar bruker slette avtale
+def slett_avtale():
+    i = 0
+    for i in range(len(avtaler)):
+        print(f"{i}. {avtaler[i].tittel}")
+    svar = int(input("Hvilken avtale vil du slette?: "))
+    del avtaler[svar]
+    print("Avtalen er slettet. Disse avtalene gjenstår: ")
+    for i in range(len(avtaler)):
+        print(f"{i}. {avtaler[0+i].tittel}")
+    print("Du tas tilbake til menyen.\n")
+        
+#n: Lar bruker redigere verdiene til valgt avtale
+def rediger_avtale():
+    i = 0
+    for i in range(len(avtaler)):
+        print(f"{i}. {avtaler[i].tittel}")
+    svar = int(input("Hvilken avtale vil du endre?: "))
+    print(f"\n1. Tittel: {avtaler[svar].tittel}")
+    print(f"2. Sted: {avtaler[svar].sted}")
+    print(f"3. Dato: {avtaler[svar].starttidspunkt}")
+    print(f"4. Varighet: {avtaler[svar].varighet} minutter\n")
+    svar2 = int(input("Hva ønsker du å endre?: (1-4) "))
+    if svar2 == 1:
+        print(f"\nForeløpig lokasjon er: {avtaler[svar].tittel}")
+        svar3 = input("Hva ønsker du å endre tittelen til?: ")
+        avtaler[svar].tittel = svar3
+        print(f"Tittelen er endret til {svar3}\n")
+    elif svar2 == 2:
+        print(f"\nForeløpig lokasjon er: {avtaler[svar].sted}")
+        svar4 = input("Hva ønsker du å endre lokasjonen til?: ")
+        avtaler[svar].sted = svar4
+        print(f"Lokasjon er endret til {svar4}\n")
+    elif svar2 == 3:
+        print(f"\nForeløpig dato og tid er satt til: {avtaler[svar].starttidspunkt}")
+        svar5 = input("Hva ønsker du å endre tidspunktet til?: ")
+        avtaler[svar].starttidspunkt = svar5
+        print(f"Tidspunktet er endret til {svar5}\n")
+    elif svar2 == 4:
+        print(f"\nForeløpig varighet er satt til: {avtaler[svar].varighet} minutter")
+        svar6 = input("Hva ønsker du å endre varigheten til?: ")
+        avtaler[svar].varighet = svar6
+        print(f"Varigheten er endret til {svar6} minutter\n")
+    else:
+        print("Ugyldig svar. Du tas tilbake til menyen.\n")
+        pass
+
 
 #l: Menysystem
 def meny():
-    menyvalg = ["Lag ny avtale", "Les inn fil med avtaler", "Skriv avtaler til ny fil", "Avslutt program"]
+    menyvalg = ["Lag ny avtale", "Les inn fil med avtaler", "Skriv avtaler til ny fil", "Slett avtale", "Rediger avtale", "Avslutt program"]
     i = 0
     while True:
         for i in range(len(menyvalg)):
             print(f"{i+1}. {menyvalg[i]}")
         valg = int(input("Velg et alternativ: "))
+        print(" ")
         if valg == 1:
             ny_avtale()
             continue
@@ -96,33 +147,15 @@ def meny():
             lag_fil()
             continue
         elif valg == 4:
+            slett_avtale()
+            continue
+        elif valg == 5:
+            rediger_avtale()
+        elif valg == 6:
             print("Programmet avsluttes.")
             break
         else:
-            print("\nOBS! Skriv et tall mellom 1 og 4.")
-
-
-#Funksjon laget frivillig
-def mer_info():
-    svar = input("Vil du se mer info om en bestemt avtale? ja/nei: ")
-    while True:
-        if svar == "ja":
-            indeks = int(input("Hvilken avtale vil du se nærmere på?: "))
-            print(avtaler[indeks])
-            break
-        elif svar != "nei":
-            # fiks
-            break
-        else:
-            break    
-
-
+            print("\nOBS! Skriv et tall mellom 1 og 6.")
 
 if __name__ == "__main__":
     meny()
- #   ny_avtale()
- #   avtale_bok("Avtaler")
-#    mer_info()
-#    lag_fil(avtaler)
-#    les_fil()
- #   tittel_sjekk()
