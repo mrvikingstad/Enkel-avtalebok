@@ -5,6 +5,7 @@ from datetime import datetime
 
 
 avtaler = []
+kategorier = []
 
 #d
 class Avtale:
@@ -19,6 +20,35 @@ class Avtale:
     def __str__(self):
         return f"Avtalen angår: {self.tittel}\nLokasjon: {self.sted}\nTidspunkt: {self.starttidspunkt}\nAvtalen beregnes til å vare i omlag {self.varighet} minutter"
 
+class Kategori:
+
+    def __init__(self, id, navn, prioritet=1):
+        self.id = str(id)
+        self.navn = str(navn)
+        self.prioritet = int(prioritet)
+
+    def __str__(self):
+        if self.prioritet == 1:
+            prio = "Standard"
+        elif self.prioritet == 2:
+            prio = "Viktig"
+        elif self.prioritet == 3:
+            prio = "Svært viktig"
+        return f"Viser informasjon for kategori med ID {self.id}:\nNavn : \"{self.navn}\"\nNåværende prioritet er satt til : \"{prio}\""
+
+def ny_kategori():
+    svar = "ja"
+    while svar == "ja":
+        kategori_id = input("Hvilken ID vil du gi kategorien?: ")
+        kategori_navn = input("Hva vil du kalle kategorien?: ")
+        kategori_prioritet = int(input("Hvor høyt vil du prioritere kategorien? (1 = standard, 2 = viktig, 3 = svært viktig): "))
+        avtale_kategori = Kategori(kategori_id, kategori_navn, kategori_prioritet)
+        kategorier.append(avtale_kategori)
+        svar = input("Ny avtale? ja/nei: ")
+    return avtale_kategori
+
+
+
 
 #f: Gir brukeren muligheten til å legge inn flere avtaler
 def ny_avtale():
@@ -29,12 +59,12 @@ def ny_avtale():
         avtale_starttidspunkt = input("Når er avtalen? ÅÅÅÅ-MM-DD TT:MM:SS ")
         avtale_varighet = int(input("Hvor lenge varer den i minutter?: "))
         oppsatt_avtale = Avtale(avtale_tittel, avtale_sted, avtale_starttidspunkt, avtale_varighet)
-        svar = input("Ny avtale? ja/nei: ")
         avtaler.append(oppsatt_avtale)
+        svar = input("Ny avtale? ja/nei: ")
     return(avtaler)
 
 
-#g: Skriver ut en liste med indekser og tittel på avtaler. Har frivillig laget en funksjon mer_info() som skriver ut mer info om avtalen man forespør ved indeks
+#g: Skriver ut en liste med indekser og tittel på avtaler.
 def avtale_bok(tittel):
     print(tittel)
     for i in range(len(avtaler)):
@@ -47,6 +77,14 @@ def lag_fil():
     with open(svar, 'w') as f:
         for line in avtaler:
             f.write(f"{line}\n")
+    print(f"Filen er lagret som {svar}")
+
+def lag_fil_kategorier():
+    svar = input("Hva vil du kalle filen?: ")+".txt"
+    with open(svar, 'w') as f:
+        for line in kategorier:
+            f.write(f"{line}\n")
+    print(f"Filen er lagret som {svar}")
 
 
 #i: Leser fil og printer ut til terminal
@@ -127,10 +165,25 @@ def rediger_avtale():
         print("Ugyldig svar. Du tas tilbake til menyen.\n")
         pass
 
+#Nytt menysystem som har en overordnet meny for å velge kategori eller avtaler
+def hovedmeny():
+    menyvalg2 = ["Avtaler", "Kategorier"]
+    i = 0
+    while True:
+        for i in range(len(menyvalg2)):
+            print(f"{i+1}. {menyvalg2[i]}")
+        valg2 = int(input("Velg et alternativ: "))
+        print(" ")
+        if valg2 == 1:
+            meny()
+            continue
+        elif valg2 == 2:
+            kategorimeny()
+            continue
 
 #l: Menysystem
 def meny():
-    menyvalg = ["Lag ny avtale", "Les inn fil med avtaler", "Skriv avtaler til ny fil", "Slett avtale", "Rediger avtale", "Avslutt program"]
+    menyvalg = ["Lag ny avtale", "Les inn fil med avtaler", "Skriv avtaler til ny fil", "Slett avtale", "Rediger avtale", "Gå til hovedmeny", "Avslutt program"]
     i = 0
     while True:
         for i in range(len(menyvalg)):
@@ -153,11 +206,44 @@ def meny():
             rediger_avtale()
             continue
         elif valg == 6:
+            hovedmeny()
+            continue
+        elif valg == 7:
             print("Programmet avsluttes.")
             break
         else:
             print("\nOBS! Skriv et tall mellom 1 og 6.")
             continue
 
+def kategorimeny():
+    menyvalg3 = ["Lag ny kategori", "Les inn fil med kategorier", "Skriv kategorier til ny fil", "Gå til hovedmeny", "Avslutt program"]
+    i = 0
+    while True:
+        for i in range(len(menyvalg3)):
+            print(f"{i+1}. {menyvalg3[i]}")
+        valg3 = int(input("Velg et alternativ: "))
+        print(" ")
+        if valg3 == 1:
+            ny_kategori()
+            continue
+        elif valg3 == 2:
+            les_fil()
+            continue
+        elif valg3 == 3:
+            lag_fil_kategorier()
+            continue
+        elif valg3 == 4:
+            hovedmeny()
+            continue
+        elif valg3 == 5:
+            print("Programmet avsluttes.")
+            break
+        else:
+            print("\nOBS! Skriv et tall mellom 1 og 5.")
+            continue
+
+
+
 if __name__ == "__main__":
-    meny()
+    hovedmeny()
+#    ny_kategori()
