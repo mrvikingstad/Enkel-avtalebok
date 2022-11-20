@@ -4,8 +4,8 @@ from datetime import datetime
 
 
 
-avtaler = []
-kategorier = []
+
+
 
 #d
 class Avtale:
@@ -16,9 +16,17 @@ class Avtale:
         self.starttidspunkt = datetime.fromisoformat(starttidspunkt)
         self.varighet = int(varighet)
 
-    #e: __str__ metode for å printe ut avtaler på oversiktelig vis
+  #  e: __str__ metode for å printe ut avtaler på oversiktelig vis
     def __str__(self):
         return f"Avtalen angår: {self.tittel}\nLokasjon: {self.sted}\nTidspunkt: {self.starttidspunkt}\nAvtalen beregnes til å vare i omlag {self.varighet} minutter"
+    
+    avtaler = []
+    kategorier = []
+
+    def legg_til_kategori(kategori):
+        Avtale.kategorier.append(Avtale.avtaler[-1])
+        return Avtale.kategorier
+
 
 class Kategori:
 
@@ -43,8 +51,8 @@ def ny_kategori():
         kategori_navn = input("Hva vil du kalle kategorien?: ")
         kategori_prioritet = int(input("Hvor høyt vil du prioritere kategorien? (1 = standard, 2 = viktig, 3 = svært viktig): "))
         avtale_kategori = Kategori(kategori_id, kategori_navn, kategori_prioritet)
-        kategorier.append(avtale_kategori)
-        svar = input("Ny avtale? ja/nei: ")
+        Avtale.kategorier.append(avtale_kategori)
+        svar = input("Ny kategori? ja/nei: ")
     return avtale_kategori
 
 
@@ -59,30 +67,41 @@ def ny_avtale():
         avtale_starttidspunkt = input("Når er avtalen? ÅÅÅÅ-MM-DD TT:MM:SS ")
         avtale_varighet = int(input("Hvor lenge varer den i minutter?: "))
         oppsatt_avtale = Avtale(avtale_tittel, avtale_sted, avtale_starttidspunkt, avtale_varighet)
-        avtaler.append(oppsatt_avtale)
+        Avtale.avtaler.append(oppsatt_avtale)
+        ny_kategori = input("Ønsker du å tilegne avtalen en kategori? ja/nei: ")
+        if ny_kategori == "ja":
+            i = 0
+            for i in range(len(Avtale.kategorier)):
+                print(f"{i+1}. {Avtale.kategorier[i][0].navn}")
+            hvilken = int(input("Hvilken kategori vil du tilegne avtalen?: "))
+            while True:
+                Avtale.legg_til_kategori(Avtale.kategorier[hvilken-1])
+                break
+        else:
+            pass
         svar = input("Ny avtale? ja/nei: ")
-    return(avtaler)
+    return(Avtale.avtaler)
 
 
 #g: Skriver ut en liste med indekser og tittel på avtaler.
 def avtale_bok(tittel):
     print(tittel)
-    for i in range(len(avtaler)):
-        print(f"{i}.: {avtaler[0+i].tittel}")
+    for i in range(len(Avtale.avtaler)):
+        print(f"{i}.: {Avtale.avtaler[0+i].tittel}")
 
 
 #h: Skriver lister til tekstfil i printet format (som ved bruk av __str__ funksjon)
 def lag_fil():
     svar = input("Hva vil du kalle filen?: ")+".txt"
     with open(svar, 'w') as f:
-        for line in avtaler:
+        for line in Avtale.avtaler:
             f.write(f"{line}\n")
     print(f"Filen er lagret som {svar}")
 
 def lag_fil_kategorier():
     svar = input("Hva vil du kalle filen?: ")+".txt"
     with open(svar, 'w') as f:
-        for line in kategorier:
+        for line in Avtale.kategorier:
             f.write(f"{line}\n")
     print(f"Filen er lagret som {svar}")
 
@@ -93,16 +112,16 @@ def les_fil():
     with open(filnavn, 'r') as f:
         for line in f:
             print(line)
-            avtaler.append(line)
+            Avtale.avtaler.append(line)
 
 
 #j: Printer ut liste av avtaler på bestemt dato
 def dato_sjekk():
     svar = datetime.fromisoformat(input("Skriv inn datoen du har lyst å sjekke: (ÅÅÅÅ-MM-DD) ")).date()
-    for dato in range(len(avtaler)):
-        if svar == (avtaler[dato].starttidspunkt.date()):
+    for dato in range(len(Avtale.avtaler)):
+        if svar == (Avtale.avtaler[dato].starttidspunkt.date()):
             print("\nFølgende avtale(r) er funnet: ")
-            print(avtaler[dato])
+            print(Avtale.avtaler[dato])
         else:
             print("Finner ingen avtale med forespurt dato.")
             break
@@ -110,10 +129,10 @@ def dato_sjekk():
 #k: Søker etter titler på avtaler. Oppgaven tolkes som man ikke skal kunne søke etter sted.
 def tittel_sjekk():
     svar = input("Skriv tittel på avtalen du har lyst å sjekke: ").lower()
-    for tittel in range(len(avtaler)):
-        if svar == (avtaler[tittel].tittel.lower()):
+    for tittel in range(len(Avtale.avtaler)):
+        if svar == (Avtale.avtaler[tittel].tittel.lower()):
             print("\nFølgende avtale(r) er funnet: ")
-            print(avtaler[tittel])
+            print(Avtale.avtaler[tittel])
         else:
             print("Finner ingen avtale med forespurt tittel.")
             break
@@ -121,49 +140,51 @@ def tittel_sjekk():
 #m: Lar bruker slette avtale
 def slett_avtale():
     i = 0
-    for i in range(len(avtaler)):
-        print(f"{i}. {avtaler[i].tittel}")
+    for i in range(len(Avtale.avtaler)):
+        print(f"{i}. {Avtale.avtaler[i].tittel}")
     svar = int(input("Hvilken avtale vil du slette?: "))
-    del avtaler[svar]
+    del Avtale.avtaler[svar]
     print("Avtalen er slettet. Disse avtalene gjenstår: ")
-    for i in range(len(avtaler)):
-        print(f"{i}. {avtaler[0+i].tittel}")
+    for i in range(len(Avtale.avtaler)):
+        print(f"{i}. {Avtale.avtaler[0+i].tittel}")
     print("Du tas tilbake til menyen.\n")
         
 #n: Lar bruker redigere verdiene til valgt avtale
 def rediger_avtale():
     i = 0
-    for i in range(len(avtaler)):
-        print(f"{i}. {avtaler[i].tittel}")
+    for i in range(len(Avtale.avtaler)):
+        print(f"{i}. {Avtale.avtaler[i].tittel}")
     svar = int(input("Hvilken avtale vil du endre?: "))
-    print(f"\n1. Tittel: {avtaler[svar].tittel}")
-    print(f"2. Sted: {avtaler[svar].sted}")
-    print(f"3. Dato: {avtaler[svar].starttidspunkt}")
-    print(f"4. Varighet: {avtaler[svar].varighet} minutter\n")
+    print(f"\n1. Tittel: {Avtale.avtaler[svar].tittel}")
+    print(f"2. Sted: {Avtale.avtaler[svar].sted}")
+    print(f"3. Dato: {Avtale.avtaler[svar].starttidspunkt}")
+    print(f"4. Varighet: {Avtale.avtaler[svar].varighet} minutter\n")
     svar2 = int(input("Hva ønsker du å endre?: (1-4) "))
     if svar2 == 1:
-        print(f"\nForeløpig lokasjon er: {avtaler[svar].tittel}")
+        print(f"\nForeløpig lokasjon er: {Avtale.avtaler[svar].tittel}")
         svar3 = input("Hva ønsker du å endre tittelen til?: ")
-        avtaler[svar].tittel = svar3
+        Avtale.avtaler[svar].tittel = svar3
         print(f"Tittelen er endret til {svar3}\n")
     elif svar2 == 2:
-        print(f"\nForeløpig lokasjon er: {avtaler[svar].sted}")
+        print(f"\nForeløpig lokasjon er: {Avtale.avtaler[svar].sted}")
         svar4 = input("Hva ønsker du å endre lokasjonen til?: ")
-        avtaler[svar].sted = svar4
+        Avtale.avtaler[svar].sted = svar4
         print(f"Lokasjon er endret til {svar4}\n")
     elif svar2 == 3:
-        print(f"\nForeløpig dato og tid er satt til: {avtaler[svar].starttidspunkt}")
+        print(f"\nForeløpig dato og tid er satt til: {Avtale.avtaler[svar].starttidspunkt}")
         svar5 = input("Hva ønsker du å endre tidspunktet til?: ")
-        avtaler[svar].starttidspunkt = svar5
+        Avtale.avtaler[svar].starttidspunkt = svar5
         print(f"Tidspunktet er endret til {svar5}\n")
     elif svar2 == 4:
-        print(f"\nForeløpig varighet er satt til: {avtaler[svar].varighet} minutter")
+        print(f"\nForeløpig varighet er satt til: {Avtale.avtaler[svar].varighet} minutter")
         svar6 = input("Hva ønsker du å endre varigheten til?: ")
-        avtaler[svar].varighet = svar6
+        Avtale.avtaler[svar].varighet = svar6
         print(f"Varigheten er endret til {svar6} minutter\n")
     else:
         print("Ugyldig svar. Du tas tilbake til menyen.\n")
         pass
+
+
 
 #Nytt menysystem som har en overordnet meny for å velge kategori eller avtaler
 def hovedmeny():
@@ -180,6 +201,8 @@ def hovedmeny():
         elif valg2 == 2:
             kategorimeny()
             continue
+        elif valg2 == 3:
+            exit()
 
 #l: Menysystem
 def meny():
@@ -210,7 +233,10 @@ def meny():
             continue
         elif valg == 7:
             print("Programmet avsluttes.")
-            break
+            exit()
+        elif valg == 8:
+            print(Avtale.avtaler)
+            continue
         else:
             print("\nOBS! Skriv et tall mellom 1 og 6.")
             continue
