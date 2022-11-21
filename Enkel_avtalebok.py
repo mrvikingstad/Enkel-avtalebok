@@ -1,12 +1,6 @@
 
 from datetime import datetime
 
-
-
-
-
-
-
 #d
 class Avtale:
 
@@ -27,7 +21,6 @@ class Avtale:
     def legg_til_kategori(kategori):
         Avtale.avtaler[-1].kategori = Avtale.kategorier[kategori]
         return Avtale.avtaler
-
 
 class Kategori:
 
@@ -55,9 +48,6 @@ def ny_kategori():
         Avtale.kategorier.append(avtale_kategori)
         svar = input("Ny kategori? ja/nei: ")
     return avtale_kategori
-
-
-
 
 #f: Gir brukeren muligheten til å legge inn flere avtaler
 def ny_avtale():
@@ -88,7 +78,6 @@ def ny_avtale():
         svar = input("Ny avtale? ja/nei: ")
     print("Du tas tilbake til menyen\n")
     return(Avtale.avtaler)
-
 
 #g: Skriver ut en liste med indekser og tittel på avtaler.
 def avtale_bok():
@@ -128,7 +117,6 @@ def lag_fil_kategorier():
     else:
         print("Du har ikke opprettet noen kategorier.\n")
 
-
 #i: Leser fil og printer ut til terminal
 def les_fil():
     filnavn = input("Skriv navnet på filen: ")+".txt"
@@ -136,7 +124,6 @@ def les_fil():
         for line in f:
             print(line)
             Avtale.avtaler.append(line)
-
 
 #j: Printer ut liste av avtaler på bestemt dato
 def dato_sjekk():
@@ -152,7 +139,6 @@ def dato_sjekk():
     else:
         print(" ")
         print("Avtaleboken er tom!\n")
-
 
 #k: Søker etter titler på avtaler. Oppgaven tolkes som man ikke skal kunne søke etter sted.
 def tittel_sjekk():
@@ -223,8 +209,6 @@ def rediger_avtale():
     else:
         print("Avtaleboken er tom!\n")
 
-
-
 #Nytt menysystem som har en overordnet meny for å velge kategori eller avtaler
 def hovedmeny():
     menyvalg2 = ["Avtaler", "Kategorier"]
@@ -281,7 +265,6 @@ def meny():
             print("\nOBS! Skriv et tall mellom 1 og 9.")
             continue
 
-
 def sokemeny():
     menyvalg = ["Søk etter tittel", "Søk etter sted", "Gå tilbake til avtalemeny"]
     i = 0
@@ -301,7 +284,6 @@ def sokemeny():
         else:
             print("\nOBS! Skriv et tall mellom 1 og 3.")
             continue
-
 
 def kategorimeny():
     menyvalg3 = ["Lag ny kategori", "Les inn fil med kategorier", "Vis alle kategorier", "Skriv kategorier til ny fil", "Gå til hovedmeny", "Avslutt program"]
@@ -332,8 +314,5 @@ def kategorimeny():
             print("\nOBS! Skriv et tall mellom 1 og 6.")
             continue
 
-
-
 if __name__ == "__main__":
     hovedmeny()
-#    ny_kategori()
