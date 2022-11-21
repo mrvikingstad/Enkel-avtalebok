@@ -18,13 +18,13 @@ class Avtale:
 
   #  e: __str__ metode for å printe ut avtaler på oversiktelig vis
     def __str__(self):
-        return f"Avtalen angår: {self.tittel}\nLokasjon: {self.sted}\nTidspunkt: {self.starttidspunkt}\nAvtalen beregnes til å vare i omlag {self.varighet} minutter"
+        return f"\nAvtalen angår: {self.tittel}\nLokasjon: {self.sted}\nTidspunkt: {self.starttidspunkt}\nAvtalen beregnes til å vare i omlag {self.varighet} minutter"
     
     avtaler = []
     kategorier = []
-
+ 
     def legg_til_kategori(kategori):
-        Avtale.kategorier.append(Avtale.avtaler[-1])
+        Avtale.kategorier.insert(kategori+1, Avtale.avtaler[-1])
         return Avtale.kategorier
 
 
@@ -42,7 +42,7 @@ class Kategori:
             prio = "Viktig"
         elif self.prioritet == 3:
             prio = "Svært viktig"
-        return f"Viser informasjon for kategori med ID {self.id}:\nNavn : \"{self.navn}\"\nNåværende prioritet er satt til : \"{prio}\""
+        return f"\n\nViser informasjon for kategori med ID {self.id}:\nNavn : \"{self.navn}\"\nNåværende prioritet er satt til : \"{prio}\""
 
 def ny_kategori():
     svar = "ja"
@@ -71,11 +71,16 @@ def ny_avtale():
         ny_kategori = input("Ønsker du å tilegne avtalen en kategori? ja/nei: ")
         if ny_kategori == "ja":
             i = 0
+            z = 0
             for i in range(len(Avtale.kategorier)):
-                print(f"{i+1}. {Avtale.kategorier[i][0].navn}")
+                try:
+                    print(f"{abs(i-z)}. {Avtale.kategorier[i].navn}")
+                    z + 1
+                except AttributeError:
+                    continue
             hvilken = int(input("Hvilken kategori vil du tilegne avtalen?: "))
             while True:
-                Avtale.legg_til_kategori(Avtale.kategorier[hvilken-1])
+                Avtale.legg_til_kategori(hvilken)
                 break
         else:
             pass
